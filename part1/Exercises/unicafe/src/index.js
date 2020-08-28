@@ -11,6 +11,8 @@ const Button = ({ onClick, text }) => (
 )
 
 const Statistics = ({ text, value }) => {
+  //if (value === NaN) return ''
+
   return (
     <div>
       {text} {value}
@@ -26,22 +28,25 @@ const App = (props) => {
   })
   const [allClicks, setAll] = useState([])
 
-  const handleGoodClick = () => setClicks({
-    ...clicks, good: clicks.good + 1
-  })
+  const handleGoodClick = () => {
+    setAll(allClicks.concat(1))
+    setClicks({ ...clicks, good: clicks.good + 1 })
+  }
 
-  const handleNeutralClick = () => setClicks({
-    ...clicks, neutral: clicks.neutral + 1
-  })
+  const handleNeutralClick = () => {
+    setAll(allClicks.concat(0))
+    setClicks({ ...clicks, neutral: clicks.neutral + 1 })
+}
 
-  const handleBadClick = () => setClicks({
-    ...clicks, bad: clicks.bad + 1
-  })
+  const handleBadClick = () => {
+    setAll(allClicks.concat(-1))
+    setClicks({ ...clicks, bad: clicks.bad + 1})
+  }
 
+  const getTotal = () => (allClicks.reduce((a, b) => a + b, 0))
   const sumClicks = () => ( clicks.good + clicks.bad + clicks.neutral )
-  const trueSum = () => (clicks.good + clicks.neutral - clicks.bad)
-  const average = () => (trueSum() / )
-  const positive = () =>
+  const getAverage = () => (sumClicks() / getTotal())
+
 
   return (
     <div>
@@ -54,6 +59,7 @@ const App = (props) => {
       <Statistics text='neutral' value={clicks.neutral} />
       <Statistics text='bad' value={clicks.bad} />
       <Statistics text='all' value={sumClicks()} />
+      <Statistics text='average' value={getAverage()} />
     </div>
   )
 }
