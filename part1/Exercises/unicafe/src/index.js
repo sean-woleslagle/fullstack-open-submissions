@@ -11,8 +11,6 @@ const Button = ({ onClick, text }) => (
 )
 
 const Statistics = ({ text, value }) => {
-  //if (value === NaN) return ''
-
   return (
     <div>
       {text} {value}
@@ -45,7 +43,16 @@ const App = (props) => {
 
   const getTotal = () => (allClicks.reduce((a, b) => a + b, 0))
   const sumClicks = () => ( clicks.good + clicks.bad + clicks.neutral )
-  const getAverage = () => (sumClicks() / getTotal())
+  const average = () => (sumClicks() / getTotal())
+  const conditionalAverage = () => {  
+      if (isNaN(average())) {
+        return 'is not yet available.'
+      } else if (average() === Infinity) {
+        return 'is too large or too small to count.'
+      } else {
+        return average()
+      }
+  }
 
 
   return (
@@ -59,7 +66,8 @@ const App = (props) => {
       <Statistics text='neutral' value={clicks.neutral} />
       <Statistics text='bad' value={clicks.bad} />
       <Statistics text='all' value={sumClicks()} />
-      <Statistics text='average' value={getAverage()} />
+      <Statistics text='average' value={conditionalAverage()} /> 
+
     </div>
   )
 }
