@@ -12,11 +12,17 @@ const Button = ({ onClick, text }) => (
 
 const Statistics = ({ text, value }) => {
   return (
-    <div>
-      {text} {value}
-    </div>
+    <table>
+      <tbody>
+        <tr>
+          <td>{text}</td>
+          <td>{value}</td>
+        </tr>
+      </tbody>
+    </table>
   )
 }
+
 
 const App = (props) => {
   const [clicks, setClicks] = useState({
@@ -41,18 +47,11 @@ const App = (props) => {
     setClicks({ ...clicks, bad: clicks.bad + 1})
   }
 
+
   const getTotal = () => (allClicks.reduce((a, b) => a + b, 0))
   const sumClicks = () => ( clicks.good + clicks.bad + clicks.neutral )
-  const average = () => (sumClicks() / getTotal())
-  const conditionalAverage = () => {  
-      if (isNaN(average())) {
-        return 'is not yet available.'
-      } else if (average() === Infinity) {
-        return 'is too large or too small to count.'
-      } else {
-        return average()
-      }
-  }
+  const average = () => Math.floor(sumClicks() / getTotal())
+  const percentPositive = () => Math.floor(((clicks.good * 100) / sumClicks())) + ' %'
 
 
   return (
@@ -66,8 +65,10 @@ const App = (props) => {
       <Statistics text='neutral' value={clicks.neutral} />
       <Statistics text='bad' value={clicks.bad} />
       <Statistics text='all' value={sumClicks()} />
-      <Statistics text='average' value={conditionalAverage()} /> 
+      <Statistics text='average' value={average()} /> 
+      <Statistics text='positive' value={percentPositive()} /> 
 
+      
     </div>
   )
 }
