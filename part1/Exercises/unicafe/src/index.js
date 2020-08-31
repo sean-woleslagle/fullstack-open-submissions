@@ -10,17 +10,23 @@ const Button = ({ onClick, text }) => (
   </button>
 )
 
-const Statistics = ({ text, value }) => {
-  return (
-    <table>
-      <tbody>
-        <tr>
-          <td>{text}</td>
-          <td>{value}</td>
-        </tr>
-      </tbody>
-    </table>
-  )
+
+const Statistics = ({ clicks, text, value }) => {
+  for (let click in clicks) {
+    if (clicks[click] === 0) {
+      return ""
+    }
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <td>{text}</td>
+            <td>{value}</td>
+          </tr>
+        </tbody>
+      </table>
+    )
+  }
 }
 
 
@@ -61,12 +67,12 @@ const App = (props) => {
       <Button onClick={handleNeutralClick} text='neutral' />
       <Button onClick={handleBadClick} text='bad' />
       <Heading text='statistics' />
-      <Statistics text='good' value={clicks.good} />
-      <Statistics text='neutral' value={clicks.neutral} />
-      <Statistics text='bad' value={clicks.bad} />
-      <Statistics text='all' value={sumClicks()} />
-      <Statistics text='average' value={average()} /> 
-      <Statistics text='positive' value={percentPositive()} /> 
+      <Statistics clicks={clicks} text='good' value={clicks.good} />
+      <Statistics clicks={clicks} text='neutral' value={clicks.neutral} />
+      <Statistics clicks={clicks} text='bad' value={clicks.bad} />
+      <Statistics clicks={clicks} text='all' value={sumClicks()} />
+      <Statistics clicks={clicks} text='average' value={average()} /> 
+      <Statistics clicks={clicks} text='positive' value={percentPositive()} /> 
 
       
     </div>
