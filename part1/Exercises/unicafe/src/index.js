@@ -10,55 +10,54 @@ const Button = ({ onClick, text }) => (
   </button>
 )
 
+const Statistic = ({ text, value }) => {
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
+  )
+}
 
-const Statistics = ({ clicks, text, value }) => {
-  for (let click in clicks) {
-    if (clicks[click] === 0) {
-      return ""
-    }
+const Statistics = ({ good, neutral, bad }) => {
+
+  const sumClicks = good + neutral + bad
+
+  if (sumClicks === 0) {
     return (
-      <table>
-        <tbody>
-          <tr>
-            <td>{text}</td>
-            <td>{value}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div>
+        No feedback given
+      </div>
     )
   }
+
+  const average = () => ((good - bad) / sumClicks).toFixed(2)
+
+  const percentPositive = () => `${Math.floor((good / sumClicks) * 100)} %`
+
+  return (
+    <table>
+      <tbody>
+        <Statistic text='good' value={good} />
+        <Statistic text='neutral' value={neutral} />
+        <Statistic text='bad' value={bad} />
+        <Statistic text='all' value={sumClicks} />
+        <Statistic text='average' value={average()} /> 
+        <Statistic text='positive' value={percentPositive()} /> 
+      </tbody>
+    </table>
+  )
 }
 
 
-const App = (props) => {
-  const [clicks, setClicks] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0
-  })
-  const [allClicks, setAll] = useState([])
+const App = () => {
+  const [good, setGoodClick] = useState(0)
+  const [neutral, setNeutralClick] = useState(0)
+  const [bad, setBadClick] = useState(0)
 
-  const handleGoodClick = () => {
-    setAll(allClicks.concat(1))
-    setClicks({ ...clicks, good: clicks.good + 1 })
-  }
-
-  const handleNeutralClick = () => {
-    setAll(allClicks.concat(0))
-    setClicks({ ...clicks, neutral: clicks.neutral + 1 })
-}
-
-  const handleBadClick = () => {
-    setAll(allClicks.concat(-1))
-    setClicks({ ...clicks, bad: clicks.bad + 1})
-  }
-
-
-  const getTotal = () => (allClicks.reduce((a, b) => a + b, 0))
-  const sumClicks = () => ( clicks.good + clicks.bad + clicks.neutral )
-  const average = () => Math.floor(sumClicks() / getTotal())
-  const percentPositive = () => Math.floor(((clicks.good * 100) / sumClicks())) + ' %'
-
+  const handleGoodClick = () => setGoodClick(good + 1)
+  const handleNeutralClick = () => setNeutralClick(neutral + 1)
+  const handleBadClick = () => setBadClick(bad + 1)
 
   return (
     <div>
@@ -67,14 +66,7 @@ const App = (props) => {
       <Button onClick={handleNeutralClick} text='neutral' />
       <Button onClick={handleBadClick} text='bad' />
       <Heading text='statistics' />
-      <Statistics clicks={clicks} text='good' value={clicks.good} />
-      <Statistics clicks={clicks} text='neutral' value={clicks.neutral} />
-      <Statistics clicks={clicks} text='bad' value={clicks.bad} />
-      <Statistics clicks={clicks} text='all' value={sumClicks()} />
-      <Statistics clicks={clicks} text='average' value={average()} /> 
-      <Statistics clicks={clicks} text='positive' value={percentPositive()} /> 
-
-      
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
